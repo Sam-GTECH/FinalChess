@@ -359,6 +359,20 @@ void Board::mouseHeld(int x, int y)
 void Board::mouseReleased(int x, int y)
 {
 	if (selected_piece == nullptr) return;
+
+	int newX = getBoardCoord(x);
+	int newY = getBoardCoord(y);
+
+	if (selected_piece->CanMoveTo(this, newX, newY))
+	{
+		selected_piece->cell->setPiece(nullptr);
+		getCase(newX, newY)->setPiece(selected_piece);
+	}
 	selected_piece->unselect();
 	selected_piece = nullptr;
+}
+
+int Board::getBoardCoord(int coord)
+{
+	return (coord - OFFSET) / (16 * SCALE);
 }

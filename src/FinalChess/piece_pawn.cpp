@@ -14,7 +14,7 @@ bool Pawn::CanMoveTo(Board* board, int x, int y) {
 	if (x != myX)
 		return false;
 
-	int dir = is_white ? 1 : -1;
+	int dir = is_white ? -1 : 1;
 
 	if (!moved_once)
 	{

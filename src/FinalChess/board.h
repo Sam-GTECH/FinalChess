@@ -61,6 +61,8 @@ public:
 	void mouseHeld(int x, int y);
 	void mouseReleased(int x, int y);
 
+	int getBoardCoord(int coord);
+
 	Piece* selected_piece;
 
 	sf::RenderWindow* getWindow();
