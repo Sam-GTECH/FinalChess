@@ -340,6 +340,7 @@ void Board::mousePressed(int x, int y)
 
 		if (Utils::pointInRect(x, y, cX, cY, w, h))
 		{
+			cout << "Selected " << p->name << endl;
 			p->mouse_x = x;
 			p->mouse_y = y;
 			p->select();
@@ -363,7 +364,9 @@ void Board::mouseReleased(int x, int y)
 	int newX = getBoardCoord(x);
 	int newY = getBoardCoord(y);
 
-	if (selected_piece->CanMoveTo(this, newX, newY))
+	bool in_range = (newX > 0 && newX < w && newY > 0 && newY < h);
+
+	if (in_range && selected_piece->CanMoveTo(this, newX, newY))
 	{
 		selected_piece->cell->setPiece(nullptr);
 		getCase(newX, newY)->setPiece(selected_piece);
