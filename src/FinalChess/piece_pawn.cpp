@@ -16,14 +16,21 @@ bool Pawn::CanMoveTo(Board* board, int x, int y) {
 
 	int dir = is_white ? -1 : 1;
 
+	bool can_move = false;
 	if (!moved_once)
 	{
 		moved_once = true;
 		bool mouv_cond = y == myY + 1 * dir || y == myY + 2 * dir;
 		bool occupied_cond = board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr && board->getCase(myX, myY + 2 * dir)->getPiece() == nullptr;
-		return mouv_cond && occupied_cond;
+		if (mouv_cond && occupied_cond) can_move = true;
 	}
-	bool mouv_cond = y == myY + 1 * dir;
-	bool occupied_cond = board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr;
-	return mouv_cond && occupied_cond;
+	else
+	{
+		bool mouv_cond = y == myY + 1 * dir;
+		bool occupied_cond = board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr;
+		if (mouv_cond && occupied_cond) can_move = true;
+	}
+	if (can_move && !moved_once)
+		moved_once = true;
+	return can_move;
 }
