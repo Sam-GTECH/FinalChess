@@ -442,7 +442,7 @@ void Board::mouseReleased(int x, int y)
 	int newX = getBoardCoord(x);
 	int newY = getBoardCoord(y);
 
-	bool in_range = (newX > 0 && newX < w && newY > 0 && newY < h);
+	bool in_range = (newX >= 0 && newX < w && newY >= 0 && newY < h);
 
 	if (in_range && selected_piece->CanMoveTo(this, newX, newY))
 	{

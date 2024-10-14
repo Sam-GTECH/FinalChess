@@ -42,7 +42,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	// Apparently, Windows counts the top bar as part of the dimension so this take care of it
 	RECT rect = { 0, 0, 142 * SCALE, 142 * SCALE };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
-	HWND hWnd = CreateWindowW(L"WinAppClass", L"Chess", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInstance, nullptr);
+	HWND hWnd = CreateWindowW(L"WinAppClass", L"Chess", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, CW_USEDEFAULT, 0, rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInstance, nullptr);
 	if ( hWnd==NULL )
 		return 0;
 
@@ -121,12 +121,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (game->mouse_held)
 				game->mouseHeld(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
 		}
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
 			HDC hdc = BeginPaint(hWnd, &ps);
 			EndPaint(hWnd, &ps);
+			break;
+		}
+		case WM_CLOSE:
+		{
+			game->getWindow()->close();
+			PostQuitMessage(0);
 			break;
 		}
 		case WM_DESTROY:
