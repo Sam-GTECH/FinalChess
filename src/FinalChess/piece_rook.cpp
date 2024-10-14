@@ -14,7 +14,7 @@ bool Rook::CanMoveTo(Board* board, int x, int y) {
 	if (x != myX && y != myY)
 		return false;
 
-	if (board->getCase(x, y)->getPiece()->is_white == is_white)
+	if (board->getCase(x, y)->getPiece() != nullptr && board->getCase(x, y)->getPiece()->is_white == is_white)
 		return false;
 
 	int dirX = 0;
