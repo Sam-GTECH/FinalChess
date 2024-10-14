@@ -12,6 +12,8 @@ public:
 	void setY(int y);
 	int getX();
 	int getY();
+	int getVisualX();
+	int getVisualY();
 
 
 	Piece* getPiece();

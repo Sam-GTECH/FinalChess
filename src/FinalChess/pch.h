@@ -9,7 +9,10 @@
 #include <windows.h>
 
 #define CONSOLE GetStdHandle(STD_OUTPUT_HANDLE)
+
 #define SCALE 4
+
+#define OFFSET 7*SCALE
 
 #include "resource.h"
 

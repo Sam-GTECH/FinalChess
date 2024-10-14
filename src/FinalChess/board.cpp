@@ -29,6 +29,15 @@ int BoardCase::getY()
 	return y;
 }
 
+int BoardCase::getVisualX()
+{
+	return OFFSET + 16 * SCALE * x;
+}
+int BoardCase::getVisualY()
+{
+	return OFFSET + 16 * SCALE * (y - 1);
+}
+
 
 Piece* BoardCase::getPiece()
 {
@@ -37,7 +46,15 @@ Piece* BoardCase::getPiece()
 
 void BoardCase::setPiece(Piece* p)
 {
+	if (piece == p) return;
+
+	if (piece != nullptr)
+		piece->cell = nullptr;
+
 	piece = p;
+
+	if (p != nullptr)
+		p->cell = this;
 }
 
 void BoardCase::print(bool cursor_on)
@@ -76,7 +93,8 @@ Board::Board()
 	{
 		board[i].setX(x);
 		board[i].setY(y);
-		if ((i + 1) > w && (i + 1) < w * h)
+		x++;
+		if (x >= w)
 		{
 			x = 0;
 			y++;
@@ -101,6 +119,7 @@ void Board::generatePieces(bool is_white)
 		Pawn* p = new Pawn();
 		p->is_white = is_white;
 		getCase(x, startRow)->setPiece(p);
+		p->initSprite();
 	}
 
 
@@ -112,6 +131,7 @@ void Board::generatePieces(bool is_white)
 #endif
 	r->is_white = is_white;
 	getCase(0, y)->setPiece(r);
+	r->initSprite();
 #ifndef _LITE
 	Rook* r2 = new Rook();
 #else
@@ -119,13 +139,16 @@ void Board::generatePieces(bool is_white)
 #endif
 	r2->is_white = is_white;
 	getCase(w - 1, y)->setPiece(r2);
+	r2->initSprite();
 
 	Knight* k1 = new Knight();
 	k1->is_white = is_white;
 	getCase(1, y)->setPiece(k1);
+	k1->initSprite();
 	Knight* k2 = new Knight();
 	k2->is_white = is_white;
 	getCase(w - 2, y)->setPiece(k2);
+	k2->initSprite();
 
 #ifndef _LITE
 	Bishop* b1 = new Bishop();
@@ -134,6 +157,7 @@ void Board::generatePieces(bool is_white)
 #endif
 	b1->is_white = is_white;
 	getCase(2, y)->setPiece(b1);
+	b1->initSprite();
 #ifndef _LITE
 	Bishop* b2 = new Bishop();
 #else
@@ -141,10 +165,12 @@ void Board::generatePieces(bool is_white)
 #endif
 	b2->is_white = is_white;
 	getCase(w - 3, y)->setPiece(b2);
+	b2->initSprite();
 
 	King* k = new King();
 	k->is_white = is_white;
 	getCase(3, y)->setPiece(k);
+	k->initSprite();
 #ifndef _LITE
 	Queen* q = new Queen();
 #else
@@ -152,6 +178,7 @@ void Board::generatePieces(bool is_white)
 #endif
 	q->is_white = is_white;
 	getCase(4, y)->setPiece(q);
+	q->initSprite();
 }
 
 void Board::createGame(HWND hWnd)
@@ -253,6 +280,12 @@ bool Board::update()
 	bool redraw = true;
 
 	getWindow()->draw(*sprite);
+	for (int i = 0; i < w*h; i++)
+	{
+		Piece* p = board[i].getPiece();
+		if (p != nullptr)
+			board[i].getPiece()->draw(getWindow());
+	}
 
 /*	while (run)
 	{
