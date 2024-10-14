@@ -12,13 +12,14 @@ public:
 	void setY(int y);
 	int getX();
 	int getY();
-	int getVisualX();
-	int getVisualY();
-
 
 	Piece* getPiece();
 	void setPiece(Piece* piece);
 	void print(bool cursor_on);
+
+	// SFML Version
+	int getVisualX();
+	int getVisualY();
 private:
 	int x;
 	int y;
@@ -39,9 +40,6 @@ public:
 	int cursor_x;
 	int cursor_y;
 
-	sf::Texture* texture;
-	sf::Sprite* sprite;
-
 	bool update();
 
 	void createGame(HWND hWnd);
@@ -49,12 +47,24 @@ public:
 	BoardCase* getBoard();
 	BoardCase* getCase(int x, int y);
 	BoardCase* getCase(int pos);
-	sf::RenderWindow* getWindow();
-	HWND getHWND();
 
 	int getPieceX(Piece* p);
 	int getPieceY(Piece* p);
 	void printBoard();
+
+	// SFML Version
+	sf::Texture* texture;
+	sf::Sprite* sprite;
+
+	bool mouse_held;
+	void mousePressed(int x, int y);
+	void mouseHeld(int x, int y);
+	void mouseReleased(int x, int y);
+
+	Piece* selected_piece;
+
+	sf::RenderWindow* getWindow();
+	HWND getHWND();
 
 #ifdef LOG
 	Logger* log;

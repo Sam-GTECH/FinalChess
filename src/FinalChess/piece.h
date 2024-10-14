@@ -23,8 +23,16 @@ public:
 
 	virtual bool CanMoveTo(Board* board, int x, int y);
 	
-	virtual void initSprite();
 	sf::Texture* texture;
 	sf::Sprite* sprite;
+
+	bool selected = false;
+	void select();
+	void unselect();
+
+	int mouse_x;
+	int mouse_y;
+
+	virtual void initSprite();	
 	void draw(sf::RenderWindow* window);
 };

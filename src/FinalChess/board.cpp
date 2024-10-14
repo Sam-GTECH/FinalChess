@@ -200,6 +200,8 @@ void Board::createGame(HWND hWnd)
 
 	generatePieces(false);
 	generatePieces(true);
+
+	selected_piece = nullptr;
 }
 
 BoardCase* Board::getBoard()
@@ -320,4 +322,43 @@ bool Board::update()
 	}
 	*/
 	return false;
+}
+
+void Board::mousePressed(int x, int y)
+{
+	for (size_t i = 0; i < w*h; i++)
+	{
+		Piece* p = board[i].getPiece();
+		if (p == nullptr)
+			continue;
+
+		int cX = board[i].getVisualX();
+		int cY = board[i].getVisualY()+(16 * SCALE);
+
+		int w = 16 * SCALE;
+		int h = w;
+
+		if (Utils::pointInRect(x, y, cX, cY, w, h))
+		{
+			p->mouse_x = x;
+			p->mouse_y = y;
+			p->select();
+			selected_piece = p;
+			break;
+		}
+	}
+}
+
+void Board::mouseHeld(int x, int y)
+{
+	if (selected_piece == nullptr) return;
+	selected_piece->mouse_x = x;
+	selected_piece->mouse_y = y;
+}
+
+void Board::mouseReleased(int x, int y)
+{
+	if (selected_piece == nullptr) return;
+	selected_piece->unselect();
+	selected_piece = nullptr;
 }

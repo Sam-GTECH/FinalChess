@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "main.h"
 
+Board* game;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
@@ -45,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	std::ofstream file("../../../sfml-log.txt");
 	std::streambuf* previous = sf::err().rdbuf(file.rdbuf());
 
-	Board* game = new Board();
+	game = new Board();
 	game->createGame(hWnd);
 
 	ShowWindow(hWnd, nCmdShow);
@@ -86,6 +88,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			int notif = HIWORD(wParam);
 			return DefWindowProc(hWnd, message, wParam, lParam);
 			break;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			if (!game->mouse_held)
+			{
+				game->mouse_held = true;
+				game->mousePressed(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			}
+			break;
+		}
+		case WM_LBUTTONUP:
+		{
+			game->mouse_held = false;
+			game->mouseReleased(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
+		}
+		case WM_MOUSEMOVE:
+		{
+			if (game->mouse_held)
+				game->mouseHeld(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		}
 		case WM_PAINT:
 		{

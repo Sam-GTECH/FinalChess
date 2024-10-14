@@ -22,6 +22,18 @@ bool Piece::CanMoveTo(Board* board, int x, int y)
 	return true;
 }
 
+void Piece::select()
+{
+	selected = true;
+	sprite->setColor(sf::Color::Green);
+}
+
+void Piece::unselect()
+{
+	selected = false;
+	sprite->setColor(sf::Color::White);
+}
+
 void Piece::initSprite()
 {
 	sprite = new sf::Sprite();
@@ -43,6 +55,9 @@ void Piece::initSprite()
 void Piece::draw(sf::RenderWindow* window)
 {
 	if (!cell) return;
-	sprite->setPosition(cell->getVisualX(), cell->getVisualY());
+	if (selected)
+		sprite->setPosition(mouse_x, mouse_y);
+	else
+		sprite->setPosition(cell->getVisualX(), cell->getVisualY());
 	window->draw(*sprite);
 }

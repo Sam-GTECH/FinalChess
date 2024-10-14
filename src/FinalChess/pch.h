@@ -7,6 +7,7 @@
 #include <string>
 #include <fstream>
 #include <windows.h>
+#include <windowsx.h>
 
 #define CONSOLE GetStdHandle(STD_OUTPUT_HANDLE)
 
@@ -17,6 +18,8 @@
 #include "resource.h"
 
 using namespace std;
+
+#include "utils.h"
 
 #include "piece.h"
 #include "piece_king.h"
