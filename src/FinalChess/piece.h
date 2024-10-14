@@ -14,8 +14,6 @@ public:
 
 	bool is_white;
 
-	bool selected = false;
-
 	BoardCase* cell;
 
 	char getCorrectIcon();
@@ -23,17 +21,19 @@ public:
 	Piece();
 	~Piece();
 
-	void select();
-	void unselect();
-
 	virtual bool CanMoveTo(Board* board, int x, int y);
 	
 #ifdef SFML_STATIC
 	sf::Texture* texture;
 	sf::Sprite* sprite;
 
+	bool selected = false;
+
 	int mouse_x;
 	int mouse_y;
+
+	void select();
+	void unselect();
 
 	virtual void initSprite();	
 	void draw(sf::RenderWindow* window);

@@ -4,11 +4,17 @@
 #define PIECE_BLACK_COLOR (0 << 4 | 15)
 #define DEFAULT_COLOR (0 << 4 | 15)
 
+#define VALID_MOVE_UNSELECTED (0 << 4 | 10)
+#define INVALID_MOVE_UNSELECTED (0 << 4 | 4)
+#define VALID_MOVE_SELECTED (0 << 4 | 2)
+#define INVALID_MOVE_SELECTED (0 << 4 | 12)
+
 BoardCase::BoardCase()
 {
 	this->x = 0;
 	this->y = 0;
 	piece = nullptr;
+	valid_move = -1;
 }
 
 void BoardCase::setX(int x)
@@ -60,6 +66,18 @@ void BoardCase::setPiece(Piece* p)
 
 void BoardCase::print(bool cursor_on)
 {
+	if (valid_move >= 0)
+	{
+		int color = valid_move ? VALID_MOVE_UNSELECTED : INVALID_MOVE_UNSELECTED;
+		if (cursor_on)
+			color = valid_move ? VALID_MOVE_SELECTED : INVALID_MOVE_SELECTED;
+		SetConsoleTextAttribute(CONSOLE, color);
+		cout << (piece == nullptr ? 'O' : piece->getCorrectIcon());
+		SetConsoleTextAttribute(CONSOLE, DEFAULT_COLOR);
+		cout << " ";
+		return;
+	}
+
 	if (piece)
 	{
 		int color = piece->is_white ? PIECE_WHITE_COLOR : PIECE_BLACK_COLOR;
@@ -71,7 +89,7 @@ void BoardCase::print(bool cursor_on)
 	else
 	{
 		SetConsoleTextAttribute(CONSOLE, cursor_on ? PIECE_WHITE_COLOR : PIECE_BLACK_COLOR);
-		std::cout << "O";
+		std::cout << 'O';
 	}
 	SetConsoleTextAttribute(CONSOLE, DEFAULT_COLOR);
 	cout << " ";
@@ -215,6 +233,8 @@ void Board::createGame()
 {
 	generatePieces(false);
 	generatePieces(true);
+
+	selected_piece = nullptr;
 }
 #endif
 
@@ -295,8 +315,6 @@ void Board::printBoard()
 
 bool Board::update()
 {
-	bool run = true;
-	bool redraw = true;
 #ifdef SFML_STATIC
 	getWindow()->draw(*sprite);
 	for (int i = 0; i < w * h; i++)
@@ -306,7 +324,8 @@ bool Board::update()
 			board[i].getPiece()->draw(getWindow());
 	}
 #else
-
+	bool run = true;
+	bool redraw = true;
 	while (run)
 	{
 		if (redraw)
@@ -325,7 +344,47 @@ bool Board::update()
 		else if (GetAsyncKeyState(VK_RIGHT) & 0x01)
 			cursor_x++;
 		else if (GetAsyncKeyState(VK_RETURN) & 0x01)
-			turn_count++;
+		{
+			if (selected_piece == nullptr)
+			{
+				Piece* p = getCase(cursor_x, cursor_y)->getPiece();
+				if (p != nullptr)
+				{
+					selected_piece = p;
+					for (size_t i = 0; i < w * h; i++)
+					{
+						auto pos = convertToCoord(i);
+						board[i].valid_move = selected_piece->CanMoveTo(this, pos.first, pos.second);
+					}
+					redraw = true;
+				}	
+			}
+			else
+			{
+				for (size_t i = 0; i < w * h; i++)
+				{
+					board[i].valid_move = -1;
+				}
+				if (selected_piece->CanMoveTo(this, cursor_x, cursor_y))
+				{
+					selected_piece->cell->setPiece(nullptr);
+					getCase(cursor_x, cursor_y)->setPiece(selected_piece);
+					turn_count++;
+				}
+				selected_piece = nullptr;
+				redraw = true;
+			}
+		}
+
+		if (cursor_x < 0)
+			cursor_x = 0;
+		else if (cursor_x > w-1)
+			cursor_x = w-1;
+
+		if (cursor_y < 0)
+			cursor_y = 0;
+		else if (cursor_y > h-1)
+			cursor_y = h-1;
 
 #ifdef _DEMO
 		if (turn_count >= 2)

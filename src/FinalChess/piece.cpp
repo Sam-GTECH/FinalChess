@@ -22,23 +22,19 @@ bool Piece::CanMoveTo(Board* board, int x, int y)
 	return true;
 }
 
+#ifdef SFML_STATIC
 void Piece::select()
 {
 	selected = true;
-#ifdef SFML_STATIC
 	sprite->setColor(sf::Color::Green);
-#endif
 }
 
 void Piece::unselect()
 {
 	selected = false;
-#ifdef SFML_STATIC
 	sprite->setColor(sf::Color::White);
-#endif
 }
 
-#ifdef SFML_STATIC
 void Piece::initSprite()
 {
 	sprite = new sf::Sprite();

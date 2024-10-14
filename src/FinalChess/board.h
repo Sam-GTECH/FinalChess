@@ -8,6 +8,8 @@ public:
 	BoardCase();
 	//BoardCase(int x, int y);
 
+	int valid_move;
+
 	void setX(int x);
 	void setY(int y);
 	int getX();
