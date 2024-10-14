@@ -12,7 +12,7 @@ bool King::CanMoveTo(Board* board, int x, int y) {
 	int myY = board->getPieceY(this);
 
 	if (board->getCase(x, y)->getPiece()->is_white == is_white)
-		return;
+		return false;
 
 	return (abs(x - myX) <= 1 && abs(y - myY) <= 1);
 }
