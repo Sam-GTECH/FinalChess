@@ -1,19 +1,23 @@
 #pragma once
 
+#ifdef SFML_STATIC
 #include <SFML/Graphics.hpp>
+#endif
 
 #include <iostream>
 #include <vector>
 #include <string>
+#ifdef SFML_STATIC
 #include <fstream>
-#include <windows.h>
 #include <windowsx.h>
-
-#define CONSOLE GetStdHandle(STD_OUTPUT_HANDLE)
 
 #define SCALE 4
 
 #define OFFSET 7*SCALE
+#endif
+#include <windows.h>
+
+#define CONSOLE GetStdHandle(STD_OUTPUT_HANDLE)
 
 #include "resource.h"
 

@@ -18,8 +18,10 @@ public:
 	void print(bool cursor_on);
 
 	// SFML Version
+#ifdef SFML_STATIC
 	int getVisualX();
 	int getVisualY();
+#endif
 private:
 	int x;
 	int y;
@@ -40,9 +42,15 @@ public:
 	int cursor_x;
 	int cursor_y;
 
+	Piece* selected_piece;
+
 	bool update();
 
+#ifdef SFML_STATIC
 	void createGame(HWND hWnd);
+#else
+	void createGame();
+#endif
 
 	BoardCase* getBoard();
 	BoardCase* getCase(int x, int y);
@@ -53,6 +61,7 @@ public:
 	void printBoard();
 
 	// SFML Version
+#ifdef SFML_STATIC
 	sf::Texture* texture;
 	sf::Sprite* sprite;
 
@@ -63,10 +72,9 @@ public:
 
 	int getBoardCoord(int coord);
 
-	Piece* selected_piece;
-
 	sf::RenderWindow* getWindow();
 	HWND getHWND();
+#endif
 
 #ifdef LOG
 	Logger* log;
@@ -74,8 +82,10 @@ public:
 
 private:
 	BoardCase board[8*8];
+#ifdef SFML_STATIC
 	sf::RenderWindow* window;
 	HWND hWnd;
+#endif
 
 	void generatePieces(bool is_white);
 	std::pair<int, int> convertToCoord(int pos);

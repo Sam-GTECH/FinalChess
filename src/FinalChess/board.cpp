@@ -28,7 +28,7 @@ int BoardCase::getY()
 {
 	return y;
 }
-
+#ifdef SFML_STATIC
 int BoardCase::getVisualX()
 {
 	return OFFSET + 16 * SCALE * x;
@@ -37,6 +37,7 @@ int BoardCase::getVisualY()
 {
 	return OFFSET + 16 * SCALE * (y - 1);
 }
+#endif
 
 
 Piece* BoardCase::getPiece()
@@ -119,7 +120,9 @@ void Board::generatePieces(bool is_white)
 		Pawn* p = new Pawn();
 		p->is_white = is_white;
 		getCase(x, startRow)->setPiece(p);
+#ifdef SFML_STATIC
 		p->initSprite();
+#endif
 	}
 
 
@@ -131,7 +134,6 @@ void Board::generatePieces(bool is_white)
 #endif
 	r->is_white = is_white;
 	getCase(0, y)->setPiece(r);
-	r->initSprite();
 #ifndef _LITE
 	Rook* r2 = new Rook();
 #else
@@ -139,16 +141,13 @@ void Board::generatePieces(bool is_white)
 #endif
 	r2->is_white = is_white;
 	getCase(w - 1, y)->setPiece(r2);
-	r2->initSprite();
 
 	Knight* k1 = new Knight();
 	k1->is_white = is_white;
 	getCase(1, y)->setPiece(k1);
-	k1->initSprite();
 	Knight* k2 = new Knight();
 	k2->is_white = is_white;
 	getCase(w - 2, y)->setPiece(k2);
-	k2->initSprite();
 
 #ifndef _LITE
 	Bishop* b1 = new Bishop();
@@ -157,7 +156,6 @@ void Board::generatePieces(bool is_white)
 #endif
 	b1->is_white = is_white;
 	getCase(2, y)->setPiece(b1);
-	b1->initSprite();
 #ifndef _LITE
 	Bishop* b2 = new Bishop();
 #else
@@ -165,12 +163,10 @@ void Board::generatePieces(bool is_white)
 #endif
 	b2->is_white = is_white;
 	getCase(w - 3, y)->setPiece(b2);
-	b2->initSprite();
 
 	King* k = new King();
 	k->is_white = is_white;
 	getCase(3, y)->setPiece(k);
-	k->initSprite();
 #ifndef _LITE
 	Queen* q = new Queen();
 #else
@@ -178,9 +174,20 @@ void Board::generatePieces(bool is_white)
 #endif
 	q->is_white = is_white;
 	getCase(4, y)->setPiece(q);
+
+#ifdef SFML_STATIC
+	r->initSprite();
+	r2->initSprite();
+	k1->initSprite();
+	k2->initSprite();
+	b1->initSprite();
+	b2->initSprite();
+	k->initSprite();
 	q->initSprite();
+#endif
 }
 
+#ifdef SFML_STATIC
 void Board::createGame(HWND hWnd)
 {
 	window = new sf::RenderWindow(hWnd);
@@ -203,6 +210,13 @@ void Board::createGame(HWND hWnd)
 
 	selected_piece = nullptr;
 }
+#else
+void Board::createGame()
+{
+	generatePieces(false);
+	generatePieces(true);
+}
+#endif
 
 BoardCase* Board::getBoard()
 {
@@ -222,6 +236,7 @@ BoardCase* Board::getCase(int pos)
 	return &board[pos];
 }
 
+#ifdef SFML_STATIC
 sf::RenderWindow* Board::getWindow()
 {
 	return window;
@@ -231,6 +246,8 @@ HWND Board::getHWND()
 {
 	return hWnd;
 }
+#endif
+
 
 int Board::getPieceX(Piece* p)
 {
@@ -280,16 +297,17 @@ bool Board::update()
 {
 	bool run = true;
 	bool redraw = true;
-
+#ifdef SFML_STATIC
 	getWindow()->draw(*sprite);
-	for (int i = 0; i < w*h; i++)
+	for (int i = 0; i < w * h; i++)
 	{
 		Piece* p = board[i].getPiece();
 		if (p != nullptr)
 			board[i].getPiece()->draw(getWindow());
 	}
+#else
 
-/*	while (run)
+	while (run)
 	{
 		if (redraw)
 		{
@@ -320,10 +338,11 @@ bool Board::update()
 		if (old_x != cursor_x || old_y != cursor_y)
 			redraw = true;
 	}
-	*/
+#endif
 	return false;
 }
 
+#ifdef SFML_STATIC
 void Board::mousePressed(int x, int y)
 {
 	for (size_t i = 0; i < w*h; i++)
@@ -370,6 +389,7 @@ void Board::mouseReleased(int x, int y)
 	{
 		selected_piece->cell->setPiece(nullptr);
 		getCase(newX, newY)->setPiece(selected_piece);
+		turn_count++;
 	}
 	selected_piece->unselect();
 	selected_piece = nullptr;
@@ -379,3 +399,4 @@ int Board::getBoardCoord(int coord)
 {
 	return (coord - OFFSET) / (16 * SCALE);
 }
+#endif

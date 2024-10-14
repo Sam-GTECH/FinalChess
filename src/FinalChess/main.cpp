@@ -1,6 +1,19 @@
 #include "pch.h"
 #include "main.h"
 
+#ifndef SFML_STATIC
+int main()
+{
+	Board* game = new Board();
+	game->createGame();
+
+	game->update();
+
+	delete game;
+
+	return 0;
+}
+#else
 Board* game;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -129,3 +142,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+#endif

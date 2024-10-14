@@ -25,15 +25,20 @@ bool Piece::CanMoveTo(Board* board, int x, int y)
 void Piece::select()
 {
 	selected = true;
+#ifdef SFML_STATIC
 	sprite->setColor(sf::Color::Green);
+#endif
 }
 
 void Piece::unselect()
 {
 	selected = false;
+#ifdef SFML_STATIC
 	sprite->setColor(sf::Color::White);
+#endif
 }
 
+#ifdef SFML_STATIC
 void Piece::initSprite()
 {
 	sprite = new sf::Sprite();
@@ -61,3 +66,4 @@ void Piece::draw(sf::RenderWindow* window)
 		sprite->setPosition(cell->getVisualX(), cell->getVisualY());
 	window->draw(*sprite);
 }
+#endif
