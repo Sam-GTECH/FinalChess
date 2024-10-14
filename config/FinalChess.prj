@@ -1,0 +1,51 @@
+{
+    "name": "FinalChess",
+    "folder": "FinalChess/",
+    "vc_project_version": "17.0",
+    "root_namespace": "FinalChess",
+    "windows_target_platform_version": "10.0",
+    "configuration": [
+        {
+            "additional_dependencies": "%(AdditionalDependencies);winmm.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;gdi32.lib;sfml-window-s-d.lib;sfml-graphics-s-d.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-audio-s-d.lib;ws2_32.lib;sfml-network-s-d.lib",
+            "additional_include_directories": "../../../SFML/include",
+            "additional_library_directories": "../../../SFML/lib",
+            "character_set": "Unicode",
+            "conformance_mode": "true",
+            "generate_debug_information": "true",
+            "int_dir": "$(ProjectDir)Build\\$(Configuration)\\intermediate\\",
+            "language_standard": "stdcpp20",
+            "name": "Debug|x64",
+            "out_dir": "$(ProjectDir)Build\\$(Configuration)\\",
+            "platform_toolset": "v143",
+            "precompiled_header": "Use",
+            "precompiled_header_file": "pch.h",
+            "preprocessor_definitions": "_DEBUG;_WINDOWS;%(PreprocessorDefinitions);SFML_STATIC",
+            "sdl_check": "true",
+            "subsystem": "Windows",
+            "type": "Application",
+            "use_debug_libraries": "true",
+            "warning_level": "Level3"
+        },
+        {
+            "additional_dependencies": "%(AdditionalDependencies);winmm.lib;sfml-system-s.lib;opengl32.lib;freetype.lib;gdi32.lib;sfml-window-s.lib;sfml-graphics-s.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-audio-s.lib;ws2_32.lib;sfml-network-s.lib",
+            "additional_include_directories": "../../../SFML/include",
+            "additional_library_directories": "../../../SFML/lib",
+            "character_set": "Unicode",
+            "conformance_mode": "true",
+            "generate_debug_information": "false",
+            "int_dir": "$(ProjectDir)Build\\$(Configuration)\\intermediate\\",
+            "language_standard": "stdcpp20",
+            "name": "Release|x64",
+            "out_dir": "$(ProjectDir)Build\\$(Configuration)\\",
+            "platform_toolset": "v143",
+            "precompiled_header": "Use",
+            "precompiled_header_file": "pch.h",
+            "preprocessor_definitions": "NDEBUG;_WINDOWS;%(PreprocessorDefinitions);SFML_STATIC",
+            "sdl_check": "true",
+            "subsystem": "Windows",
+            "type": "Application",
+            "use_debug_libraries": "false",
+            "warning_level": "Level3"
+        }
+    ]
+}
