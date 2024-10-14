@@ -11,29 +11,33 @@ bool Pawn::CanMoveTo(Board* board, int x, int y) {
 	int myX = board->getPieceX(this);
 	int myY = board->getPieceY(this);
 
-	if (x != myX)
-		return false;
-
 	if (board->getCase(x, y)->getPiece() != nullptr && board->getCase(x, y)->getPiece()->is_white == is_white)
 		return false;
 
 	int dir = is_white ? -1 : 1;
 
-	bool can_move = false;
-	if (!moved_once)
-	{
-		moved_once = true;
-		bool mouv_cond = y == myY + 1 * dir || y == myY + 2 * dir;
-		bool occupied_cond = board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr && board->getCase(myX, myY + 2 * dir)->getPiece() == nullptr;
-		if (mouv_cond && occupied_cond) can_move = true;
+	if (abs(myX - x) == 1 && y == myY + 1 * dir) {
+		Piece* p = board->getCase(x, y)->getPiece();
+		if (p != nullptr && p->is_white != is_white) {
+			return true;
+		}
 	}
-	else
-	{
-		bool mouv_cond = y == myY + 1 * dir;
-		bool occupied_cond = board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr;
-		if (mouv_cond && occupied_cond) can_move = true;
+
+	if (x != myX)
+		return false;
+
+	if (y == myY + 1 * dir) {
+		if (board->getCase(x, y)->getPiece() == nullptr) {
+			return true;
+		}
 	}
-	if (can_move && !moved_once)
-		moved_once = true;
-	return can_move;
+
+	if (!moved_once && y == myY + 2 * dir) {
+		if (board->getCase(myX, myY + 1 * dir)->getPiece() == nullptr &&
+			board->getCase(myX, myY + 2 * dir)->getPiece() == nullptr) {
+			return true;
+		}
+	}
+
+	return false;
 }
