@@ -5,11 +5,21 @@
 int main()
 {
 	Board* game = new Board();
+
+#ifdef LOG
+	Logger* log = new Logger();
+	game->log = log;
+	log->Info("Logger is activated!");
+#endif
+
 	game->createGame();
 
 	game->update();
 
 	delete game;
+#ifdef LOG
+	delete log;
+#endif
 
 	return 0;
 }
@@ -61,12 +71,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	std::streambuf* previous = sf::err().rdbuf(file.rdbuf());
 
 	game = new Board();
+
+#ifdef LOG
+	Logger* log = new Logger();
+	game->log = log;
+	log->Info("Logger is activated!");
+#endif
+
 	game->createGame(hWnd);
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
-
-	game->printBoard();
 
 	MSG msg;
 	while (game->getWindow()->isOpen())

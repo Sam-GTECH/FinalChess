@@ -131,6 +131,10 @@ Board::~Board()
 
 void Board::generatePieces(bool is_white)
 {
+	std::string color = (is_white ? "white" : "black");
+#ifdef LOG
+	log->Debug("Creating " + color + " pieces!");
+#endif
 	int startRow = is_white ? h-2 : 1;
 
 	for (size_t x = 0; x < w; x++)
@@ -308,7 +312,7 @@ void Board::printBoard()
 			std::cout << std::endl;
 		}
 	}
-#ifdef LOG
+#if defined(LOG) && !defined(SFML_STATIC)
 	log->printHistory();
 #endif
 }
@@ -330,6 +334,9 @@ bool Board::update()
 	{
 		if (redraw)
 		{
+#ifdef LOG
+			log->Debug("Redrawing the board");
+#endif
 			printBoard();
 			redraw = false;
 		}
@@ -351,6 +358,9 @@ bool Board::update()
 				if (p != nullptr)
 				{
 					selected_piece = p;
+#ifdef LOG
+					log->Info("Selected " + p->name);
+#endif
 					for (size_t i = 0; i < w * h; i++)
 					{
 						auto pos = convertToCoord(i);
@@ -418,7 +428,9 @@ void Board::mousePressed(int x, int y)
 
 		if (Utils::pointInRect(x, y, cX, cY, w, h))
 		{
-			cout << "Selected " << p->name << endl;
+#ifdef LOG
+			log->Info("Selected " + p->name);
+#endif
 			p->mouse_x = x;
 			p->mouse_y = y;
 			p->select();

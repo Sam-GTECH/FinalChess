@@ -11,34 +11,59 @@ Logger::Logger()
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
-void Logger::Debug(const char* msg)
+void Logger::Debug(std::string msg)
 {
 	std::string header = "[DEBUG] ";
 	std::pair<int, std::string> data(DEFAULT_COLOR, header + msg);
+#ifndef SFML_STATIC
 	history.push_back(data);
+#else
+	SetConsoleTextAttribute(handle, data.first);
+	cout << data.second << endl;
+	SetConsoleTextAttribute(handle, DEFAULT_COLOR);
+#endif
 }
 
-void Logger::Info(const char* msg)
+void Logger::Info(std::string msg)
 {
 	std::string header = "[INFO] ";
 	std::pair<int, std::string> data(INFO_COLOR, header+msg);
+#ifndef SFML_STATIC
 	history.push_back(data);
+#else
+	SetConsoleTextAttribute(handle, data.first);
+	cout << data.second << endl;
+	SetConsoleTextAttribute(handle, DEFAULT_COLOR);
+#endif
 }
 
-void Logger::Warn(const char* msg)
+void Logger::Warn(std::string msg)
 {
 	std::string header = "[WARN] ";
 	std::pair<int, std::string> data(WARN_COLOR, header + msg);
+#ifndef SFML_STATIC
 	history.push_back(data);
+#else
+	SetConsoleTextAttribute(handle, data.first);
+	cout << data.second << endl;
+	SetConsoleTextAttribute(handle, DEFAULT_COLOR);
+#endif
 }
 
-void Logger::Error(const char* msg)
+void Logger::Error(std::string msg)
 {
 	std::string header = "[ERROR] ";
 	std::pair<int, std::string> data(ERROR_COLOR, header + msg);
+#ifndef SFML_STATIC
 	history.push_back(data);
+#else
+	SetConsoleTextAttribute(handle, data.first);
+	cout << data.second << endl;
+	SetConsoleTextAttribute(handle, DEFAULT_COLOR);
+#endif
 }
 
+#ifndef SFML_STATIC
 void Logger::printHistory()
 {
 	cout << endl << endl;
@@ -59,4 +84,5 @@ void Logger::printHistory()
     }
 	SetConsoleTextAttribute(handle, DEFAULT_COLOR);
 }
+#endif
 #endif

@@ -5,15 +5,19 @@ class Logger
 public:
 	Logger();
 
-	void Debug(const char* msg);
-	void Info(const char* msg);
-	void Warn(const char* msg);
-	void Error(const char* msg);
+	void Debug(std::string msg);
+	void Info(std::string msg);
+	void Warn(std::string msg);
+	void Error(std::string msg);
 
+#ifndef SFML_STATIC
 	void printHistory();
+#endif
 
 private:
 	HANDLE handle;
 
+#ifndef SFML_STATIC
 	std::vector<std::pair<int, std::string>> history;
+#endif
 };

@@ -1,4 +1,5 @@
 #pragma once
+#define LOG
 
 #ifdef SFML_STATIC
 #include <SFML/Graphics.hpp>
